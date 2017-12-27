@@ -1,5 +1,8 @@
 (ns skyfolks.core
-  (:require [aleph.http :as http]
+  (:require
+            [skyfolks.cfg :refer [read-cfg]]
+
+            [aleph.http :as http]
             [compojure.core :as c]
             [compojure.route :as route]
             [ring.middleware.params :as params]))
@@ -20,8 +23,9 @@
 
 
 (defn -main [& args]
-  (http/start-server handler {:port 10000})
-  (println "Started"))
+  (let [cfg (read-cfg "./cfg/config.clj")]
+    (http/start-server handler {:port 10000})
+    (println "Started")))
 
 
 
