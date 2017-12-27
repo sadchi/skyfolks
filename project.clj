@@ -7,7 +7,8 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [compojure "1.6.0"]
                  [aleph "0.4.4"]
-                 [ring "1.6.3"]]
+                 [ring "1.6.3"]
+                 [manifold "0.1.6"]]
 
   :source-paths ["src" "src/clj" "src/sql"]
 
