@@ -10,6 +10,9 @@
                  [ring "1.6.3"]
                  [manifold "0.1.6"]]
 
+
+  :plugins [[lein-gorilla "0.4.0"]]
+
   :source-paths ["src" "src/clj" "src/sql"]
 
   :resource-paths ["cfg" "resources"]
