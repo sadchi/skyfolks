@@ -13,6 +13,7 @@
                  [manifold "0.1.6"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.946"]
+                 [prismatic/schema "1.1.7"]
                  [reagent "0.8.0-alpha2"]
                  [ring "1.6.3"]
                  ]
