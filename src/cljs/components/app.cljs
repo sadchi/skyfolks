@@ -1,6 +1,7 @@
 (ns components.app
   (:require
     [components.common-styles :as cs]
+    [components.console :as con]
     [components.core :as c]
     [components.params :as p]
     [components.toolbar :as t]
@@ -36,6 +37,9 @@
                                    :border-style   "solid"
                                    :border-color   (v :border-color)}])
 
+(def app-container__panels__item--50 ^:css {:flex-basis "50%"})
+
+
 (defn app [_]
   [:div (c/cls 'app-container)
    [:div (c/cls 'app-container__work-area) "Test work area"]
@@ -45,7 +49,16 @@
                 {:content  [:div (c/cls 'cs/icon-up)]
                  :on-click (fn [] (c/log "Mmmmm"))}
                 {:content  [:div (c/cls 'cs/icon-down)]
-                 :on-click (fn [] (c/log "Fuck"))}]]
+                 :on-click (fn [] (c/log "i-1"))}
+                {:content  [:div (c/cls 'cs/icon-play)]
+                 :on-click (fn [] (c/log "i-2"))}
+                {:content  [:div (c/cls 'cs/icon-fast-forward)]
+                 :on-click (fn [] (c/log "i-3"))}
+                {:content  [:div (c/cls 'cs/icon-to-end)]
+                 :on-click (fn [] (c/log "i-4"))}
+                {:content  [:div (c/cls 'cs/icon-pause)]
+                 :on-click (fn [] (c/log "i-5"))}]]
+    [:div (c/cls 'app-container__panels__item--50) [con/console nil]]
     "Test panel"]])
 
 

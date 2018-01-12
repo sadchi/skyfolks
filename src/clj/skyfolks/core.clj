@@ -11,11 +11,6 @@
 
 
 
-(defn hello-world-handler [_]
-  {:status  200
-   :headers {"content-type" "text/plain"}
-   :body    "hello world!"})
-
 (def handler
   (params/wrap-params
     (c/routes
