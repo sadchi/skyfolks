@@ -23,7 +23,7 @@
 (def app-container ^:css [cs/flex-box
                           {:height     "100vh"
                            :width      "100vw"
-                           :font-size  (px 14)
+                           :font-size  (px 12)
                            :color      (:dark-grey p/colors)
                            :background "white"}])
 
@@ -37,8 +37,22 @@
                                    :border-style   "solid"
                                    :border-color   (v :border-color)}])
 
-(def app-container__panels__item--50 ^:css {:flex-basis "50%"})
+(def app-container__panels__rest ^:css {:flex-grow   1
+                                        :flex-shrink 0
+                                        :position    "relative"})
 
+(def app-container__panels__rest__0-50 ^:css {:position "absolute"
+                                              :top      0
+                                              :bottom   "50%"
+                                              :left     0
+                                              :right    0})
+
+
+(def app-container__panels__rest__50-100 ^:css {:position "absolute"
+                                                :top      "50%"
+                                                :bottom   0
+                                                :left     0
+                                                :right    0})
 
 (defn app [_]
   [:div (c/cls 'app-container)
@@ -58,8 +72,10 @@
                  :on-click (fn [] (c/log "i-4"))}
                 {:content  [:div (c/cls 'cs/icon-pause)]
                  :on-click (fn [] (c/log "i-5"))}]]
-    [:div (c/cls 'app-container__panels__item--50) [con/console nil]]
-    "Test panel"]])
+    [:div (c/cls 'app-container__panels__rest)
+     [:div (c/cls 'app-container__panels__rest__0-50) [con/console nil]]
+     [:div (c/cls 'app-container__panels__rest__50-100) "Test panel"]]
+    ]])
 
 
 
