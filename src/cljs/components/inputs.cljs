@@ -25,7 +25,11 @@
                         :border-style "none"
                         :box-sizing   "border-box"
                         }
-                       [:&:focus {}]])
+                       [:&:focus
+
+                        [:before
+                         cs/iconic-font
+                         {:content "\"\\e809\""}]]])
 
 
 (defn fullsize-input [placeholder on-change-f & {:keys [value autofocus]}]
