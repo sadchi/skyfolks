@@ -15,7 +15,7 @@
 (def default-params
   {:cmd-height 32
    :padding    16
-   :accent     "#2196F3"
+   :accent     "#607D8B"
    :reputation {:good    "#009688"
                 :bad     "#F44336"
                 :warning "#2196F3"
@@ -61,8 +61,8 @@
                             }
                            [:&:before {:position     "absolute"
                                        :content      "\" \""
-                                       :top          0
-                                       :bottom       0
+                                       :top          "-1px"
+                                       :bottom       "-1px"
                                        :left         0
                                        :right        0
                                        :border-width "1px 0 1px 0"
@@ -71,20 +71,20 @@
                                        }]])
 
 
-(def console-s__cmd__input ^:css [{:outline      "none"
-                                   :padding-left (px (v :padding))
+(def console-s__cmd__input ^:css [cs/mono-font
+                                  {:outline      "none"
                                    :position     "absolute"
                                    :top          0
                                    :bottom       0
                                    :left         0
                                    :right        0
                                    :width        "100%"
-                                   :padding-left (px (v :padding :left))
+                                   :padding-left (px (v :padding))
                                    :border-width "0 0 0 4px"
                                    :border-style "solid"
                                    :border-color "transparent"
                                    :box-sizing   "border-box"}
-                                  [:&:focus {:border-color (v :accent)}]])
+                                  [:&:focus {:border-color (cs/rgba (v :accent) 1)}]])
 
 (defn console-cmd []
   (let [val (r/atom nil)]
@@ -97,11 +97,12 @@
                       :autoCorrect "off"
                       :autoComplete "off"
                       :value @val
-                      :placeholder placeholder
-                      :on-change (fn [x]
-                                   (let [new-val (-> x .-target .-value)]
-                                     #_(reset! val new-val)
-                                     #_(f))))]])))
+                      :on-key-press (fn [e]
+                                      (c/log "key press" (.-charCode e))
+                                      (if (= 13 (.-charCode e))
+                                        (c/log "ENTER")
+                                        (c/log "NOT ENTER")))
+                      :on-change (fn [x] (reset! val (-> x .-target .-value))))]])))
 
 (defn console-log-item [[reputation text]]
   [:div (c/cls (case reputation
