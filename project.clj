@@ -10,6 +10,7 @@
                  [compojure "1.6.0"]
                  [garden "1.3.3"]
                  [hiccup "1.0.5"]
+                 [keybind "2.2.0"]
                  [manifold "0.1.6"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.946"]
