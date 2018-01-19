@@ -1,19 +1,21 @@
 (ns components.console
   (:require
+    [utils.ring-buffer :as rb]
     [components.common-styles :as cs]
     [components.core :as c]
+    [components.inputs :as in]
     [components.params :as p]
     [garden.color :as gc]
     [garden.core :refer [css]]
     [garden.units :refer [px]]
+    [keybind.core :as key]
     [reagent.core :as r]
-    [components.inputs :as in]
-
     ))
 
 
 (def default-params
-  {:cmd-height 32
+  {:cmd-buffer 50
+   :cmd-height 32
    :padding    16
    :accent     "#607D8B"
    :reputation {:good    "#009688"
@@ -86,23 +88,55 @@
                                    :box-sizing   "border-box"}
                                   [:&:focus {:border-color (cs/rgba (v :accent) 1)}]])
 
-(defn console-cmd []
-  (let [val (r/atom nil)]
-    (fn []
-      [:div (c/cls 'console-s__cmd)
-       [:input (c/cls 'console-s__cmd__input
-                      :type "text"
-                      :spellCheck "false"
-                      :autoCapitalize "off"
-                      :autoCorrect "off"
-                      :autoComplete "off"
-                      :value @val
-                      :on-key-press (fn [e]
-                                      (c/log "key press" (.-charCode e))
-                                      (if (= 13 (.-charCode e))
-                                        (c/log "ENTER")
-                                        (c/log "NOT ENTER")))
-                      :on-change (fn [x] (reset! val (-> x .-target .-value))))]])))
+(defn console-cmd [executor]
+  (let [val (r/atom nil)
+        read-pointer (r/atom 0)
+        commands (r/atom (rb/ring-buffer (v :cmd-buffer)))
+
+        next-pointer (fn [x] (min (inc x) (count @commands)))
+        prev-pointer (fn [x] (max (dec x) 0))
+
+        add-command-to-buffer (fn []
+                                (c/log "Add to buffer")
+                                (swap! commands conj @val)
+                                (reset! read-pointer 0)
+                                (reset! val "")
+                                (c/log "commands: " @commands))
+        next-command-from-buffer (fn []
+                                   (c/log "Getting next command")
+                                   (c/log "commands: " @commands)
+                                   (reset! val (nth @commands (swap! read-pointer next-pointer))))
+        prev-command-from-buffer (fn []
+                                   (c/log "Getting prev command")
+                                   (c/log "commands: " @commands)
+                                   (reset! val (nth @commands (swap! read-pointer prev-pointer))))
+        ]
+    (r/create-class
+      {:component-did-mount (fn [this]
+                              (key/bind! "f4" ::console-cmd (fn []
+                                                              (-> (r/dom-node this)
+                                                                  (.getElementsByTagName "input")
+                                                                  (aget 0)
+                                                                  (.focus)))))
+       :component-function  (fn []
+                              [:div (c/cls 'console-s__cmd)
+                               [:input (c/cls 'console-s__cmd__input
+                                              :type "text"
+                                              :spellCheck "false"
+                                              :autoCapitalize "off"
+                                              :autoCorrect "off"
+                                              :autoComplete "off"
+                                              :value @val
+                                              :on-key-down (fn [e]
+                                                             (condp = (.-which e)
+                                                               13 (do
+                                                                    (executor @val)
+                                                                    (add-command-to-buffer))
+                                                               38 (prev-command-from-buffer)
+                                                               40 (next-command-from-buffer)
+                                                               27 (reset! val "")
+                                                               nil))
+                                              :on-change (fn [x] (reset! val (-> x .-target .-value))))]])})))
 
 (defn console-log-item [[reputation text]]
   [:div (c/cls (case reputation
@@ -130,11 +164,12 @@
 
 
 (defn console [spec]
-  (let [log (r/atom nil)]
+  (let [log (r/atom [])]
     (fn [spec]
       [:div (c/cls 'console-s)
+       (c/log "log: " @log)
        [console-log log]
-       [console-cmd]])))
+       [console-cmd (fn [x] (swap! log conj [:good x]))]])))
 
 
 
