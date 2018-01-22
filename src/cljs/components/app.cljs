@@ -3,11 +3,14 @@
     [components.common-styles :as cs]
     [components.console :as con]
     [components.core :as c]
+    [components.json-box :as jb]
     [components.params :as p]
     [components.toolbar :as t]
+    [components.work-area :as wa]
     [garden.color :as gc]
     [garden.core :refer [css]]
     [garden.units :refer [px]]
+    [reagent.core :as r]
     ))
 
 
@@ -28,10 +31,12 @@
                            :background "white"}])
 
 
-(def app-container__work-area ^:css {:flex-grow 1})
+(def app-container__work-area ^:css {:flex-grow 1
+                                     :position  "relative"})
 
 (def app-container__panels ^:css [cs/flex-box
-                                  {:flex-direction "column"
+                                  {:flex-shrink    0
+                                   :flex-direction "column"
                                    :width          (px (v :panels-width))
                                    :border-width   "0 0 0 1px"
                                    :border-style   "solid"
@@ -55,27 +60,29 @@
                                                 :right    0})
 
 (defn app [_]
-  [:div (c/cls 'app-container)
-   [:div (c/cls 'app-container__work-area) "Test work area"]
-   [:div (c/cls 'app-container__panels)
-    [t/toolbar [{:content  [:div (c/cls 'cs/icon-pencil)]
-                 :on-click (fn [] (c/log "Ha ha"))}
-                {:content  [:div (c/cls 'cs/icon-up)]
-                 :on-click (fn [] (c/log "Mmmmm"))}
-                {:content  [:div (c/cls 'cs/icon-down)]
-                 :on-click (fn [] (c/log "i-1"))}
-                {:content  [:div (c/cls 'cs/icon-play)]
-                 :on-click (fn [] (c/log "i-2"))}
-                {:content  [:div (c/cls 'cs/icon-fast-forward)]
-                 :on-click (fn [] (c/log "i-3"))}
-                {:content  [:div (c/cls 'cs/icon-to-end)]
-                 :on-click (fn [] (c/log "i-4"))}
-                {:content  [:div (c/cls 'cs/icon-pause)]
-                 :on-click (fn [] (c/log "i-5"))}]]
-    [:div (c/cls 'app-container__panels__rest)
-     [:div (c/cls 'app-container__panels__rest__0-50) [con/console nil]]
-     [:div (c/cls 'app-container__panels__rest__50-100) "Test panel"]]
-    ]])
+  (let [extra-param (r/atom "Test work area")]
+    (fn []
+      [:div (c/cls 'app-container)
+       [:div (c/cls 'app-container__work-area) [wa/work-area extra-param]]
+       [:div (c/cls 'app-container__panels)
+        [t/toolbar [{:content  [:div (c/cls 'cs/icon-pencil)]
+                     :on-click (fn [] (c/log "Ha ha"))}
+                    {:content  [:div (c/cls 'cs/icon-up)]
+                     :on-click (fn [] (c/log "Mmmmm"))}
+                    {:content  [:div (c/cls 'cs/icon-down)]
+                     :on-click (fn [] (c/log "i-1"))}
+                    {:content  [:div (c/cls 'cs/icon-play)]
+                     :on-click (fn [] (c/log "i-2"))}
+                    {:content  [:div (c/cls 'cs/icon-fast-forward)]
+                     :on-click (fn [] (c/log "i-3"))}
+                    {:content  [:div (c/cls 'cs/icon-to-end)]
+                     :on-click (fn [] (c/log "i-4"))}
+                    {:content  [:div (c/cls 'cs/icon-pause)]
+                     :on-click (fn [] (c/log "i-5"))}]]
+        [:div (c/cls 'app-container__panels__rest)
+         [:div (c/cls 'app-container__panels__rest__0-50) [con/console nil]]
+         [:div (c/cls 'app-container__panels__rest__50-100) [jb/json-box extra-param]]]
+        ]])))
 
 
 

@@ -1,6 +1,5 @@
 (ns components.console
   (:require
-    [utils.ring-buffer :as rb]
     [components.common-styles :as cs]
     [components.core :as c]
     [components.inputs :as in]
@@ -10,6 +9,7 @@
     [garden.units :refer [px]]
     [keybind.core :as key]
     [reagent.core :as r]
+    [utils.ring-buffer :as rb]
     ))
 
 
@@ -41,7 +41,9 @@
                             ;:flex-shrink     1
                             ;:flex-direction  "column"
                             ;:justify-content "flex-end"
-                            :overflow-y   "scroll"}])
+                            :overflow-y   "scroll"
+                            :overflow-x   "auto"
+                            }])
 
 (def console-s__log__item ^:css {:color (v :reputation :neutral)})
 
@@ -57,9 +59,6 @@
                             :flex-shrink 0
                             :height      (px (v :cmd-height))
                             :line-height (px (v :cmd-height))
-                            ;:border-width "1px 0 1px 0"
-                            ;:border-style "solid"
-                            ;:border-color "rgba(0,0,0,0.3)"
                             }
                            [:&:before {:position     "absolute"
                                        :content      "\" \""
@@ -113,7 +112,7 @@
         ]
     (r/create-class
       {:component-did-mount (fn [this]
-                              (key/bind! "f4" ::console-cmd (fn []
+                              (key/bind! "f7" ::console-cmd (fn []
                                                               (-> (r/dom-node this)
                                                                   (.getElementsByTagName "input")
                                                                   (aget 0)
