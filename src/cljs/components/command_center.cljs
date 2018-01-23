@@ -17,7 +17,7 @@
 
 (def g
   (str
-    "command : keyword params"
+    "command : keyword params\n"
     "keyword : " command-list-grammar "\n"
     "
     command          : keyword <space>+ params*
