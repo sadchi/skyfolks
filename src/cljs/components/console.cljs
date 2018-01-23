@@ -87,7 +87,7 @@
                                    :box-sizing   "border-box"}
                                   [:&:focus {:border-color (cs/rgba (v :accent) 1)}]])
 
-(defn console-cmd [executor]
+(defn console-cmd [handler]
   (let [val (r/atom nil)
         read-pointer (r/atom 0)
         commands (r/atom (rb/ring-buffer (v :cmd-buffer)))
@@ -129,7 +129,7 @@
                                               :on-key-down (fn [e]
                                                              (condp = (.-which e)
                                                                13 (do
-                                                                    (executor @val)
+                                                                    (handler @val)
                                                                     (add-command-to-buffer))
                                                                38 (prev-command-from-buffer)
                                                                40 (next-command-from-buffer)
@@ -162,13 +162,12 @@
 
 
 
-(defn console [spec]
-  (let [log (r/atom [])]
-    (fn [spec]
+(defn console [& opts]
+  (fn [& opts]
+    (let [{:keys [log-a handler]} opts]
       [:div (c/cls 'console-s)
-       (c/log "log: " @log)
-       [console-log log]
-       [console-cmd (fn [x] (swap! log conj [:good x]))]])))
+       [console-log log-a]
+       [console-cmd handler]])))
 
 
 

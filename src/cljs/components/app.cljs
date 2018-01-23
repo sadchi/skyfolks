@@ -59,8 +59,19 @@
                                                 :left     0
                                                 :right    0})
 
+(defn wrap-log-command [log-a handler]
+  (fn [command]
+    (swap! log-a conj [:neutral command])
+    (handler command)))
+
+(defn )
+
+(defn wrap-execute-commnad )
+
+
 (defn app [_]
-  (let [extra-param (r/atom "Test work area")]
+  (let [extra-param (r/atom "Test work area")
+        log (r/atom [])]
     (fn []
       [:div (c/cls 'app-container)
        [:div (c/cls 'app-container__work-area) [wa/work-area extra-param]]
@@ -80,7 +91,7 @@
                     {:content  [:div (c/cls 'cs/icon-pause)]
                      :on-click (fn [] (c/log "i-5"))}]]
         [:div (c/cls 'app-container__panels__rest)
-         [:div (c/cls 'app-container__panels__rest__0-50) [con/console nil]]
+         [:div (c/cls 'app-container__panels__rest__0-50) [con/console :log-a log :handler (fn [x] (swap! log conj [:good x]))]]
          [:div (c/cls 'app-container__panels__rest__50-100) [jb/json-box extra-param]]]
         ]])))
 
