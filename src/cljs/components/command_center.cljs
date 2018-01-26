@@ -5,7 +5,7 @@
 
 
 (defn echo [& params]
-  (s/join " " params))
+  [:good (s/join " " params)])
 
 (def command-list {:echo echo})
 
@@ -16,26 +16,6 @@
                  (keyword)
                  (get command-list))
         params (rest splitted-command)]
-    (when (some? cmd)
-      (apply cmd params))))
-
-
-;(def command-list-grammar
-;  (s/join " | " (map #(str "'" (name %) "'") (keys command-list))))
-;
-;(def g
-;  (str
-;    "command : keyword params\n"
-;    "keyword : " command-list-grammar "\n"
-;    "
-;    command          : keyword <space>+ params*
-;    params           : Epsilon | param | param (<space>+ param)*
-;    param            : param-syms | <quote> non-quote-syms <quote>
-;    <param-syms>     : #'[^ \"]+'
-;    <non-quote-syms> : #'[^\"]+'
-;    <quote>          : '\"'
-;    <space>          : ' '
-;  "))
-;
-;
-;(defonce parser (i/parser g))
+    (if (some? cmd)
+      (apply cmd params)
+      [:bad (str "Unknown cmd: " (first splitted-command))])))

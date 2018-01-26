@@ -1,5 +1,6 @@
 (ns components.app
   (:require
+    [components.command-center :as cc]
     [components.common-styles :as cs]
     [components.console :as con]
     [components.core :as c]
@@ -59,14 +60,34 @@
                                                 :left     0
                                                 :right    0})
 
-(defn wrap-log-command [log-a handler]
+(defn wrap-add-command []
   (fn [command]
-    (swap! log-a conj [:neutral command])
-    (handler command)))
+    {:command command}))
 
-(defn )
 
-(defn wrap-execute-commnad )
+(defn wrap-log-command [log-a handler]
+  (fn [context]
+    (let [res (handler context)]
+      (swap! log-a conj [:neutral (:command res)])
+      res)))
+
+
+
+(defn wrap-execute-command [handler]
+  (fn [context]
+    (let [res (handler context)]
+      (assoc res :result (cc/execute-command context)))))
+
+(defn wrap-log-result [log-a handler]
+  (fn [context]
+    (let [res (handler context)]
+      (swap! log-a conj (:result res)))))
+
+(defn full-handler [log-a]
+  (->> (wrap-add-command)
+       (wrap-log-command log-a)
+       (wrap-execute-command)
+       (wrap-log-result log-a)))
 
 
 (defn app [_]
@@ -91,7 +112,7 @@
                     {:content  [:div (c/cls 'cs/icon-pause)]
                      :on-click (fn [] (c/log "i-5"))}]]
         [:div (c/cls 'app-container__panels__rest)
-         [:div (c/cls 'app-container__panels__rest__0-50) [con/console :log-a log :handler (fn [x] (swap! log conj [:good x]))]]
+         [:div (c/cls 'app-container__panels__rest__0-50) [con/console :log-a log :handler (full-handler log)]]
          [:div (c/cls 'app-container__panels__rest__50-100) [jb/json-box extra-param]]]
         ]])))
 
