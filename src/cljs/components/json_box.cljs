@@ -53,7 +53,8 @@
                                                                 ;(aget 0)
                                                                 (.focus)))))
      :component-function  (fn []
-                            [:textarea (c/cls :wrap "off"
+                            [:textarea (c/cls :value @val
+                                              :wrap "off"
                                               :spellCheck "false"
                                               :autoCapitalize "off"
                                               :autoCorrect "off"

@@ -25,7 +25,7 @@
             [lein-gorilla "0.4.0"]
             ]
 
-  :source-paths ["src" "src/clj" "src/cljs"]
+  :source-paths ["src" "src/clj" "src/cljs" "src/cljc"]
 
   :resource-paths ["cfg" "resources"]
 
@@ -35,7 +35,7 @@
   :cljsbuild {:builds
               {:report
                {:jar          true
-                :source-paths ["src/cljs"]
+                :source-paths ["src/cljs" "src/cljc"]
                 :compiler     {:output-to     "resources/public/app.js"
                                :output-dir    "resources/public/out"
                                :asset-path    "out"
@@ -43,7 +43,7 @@
                                :pretty-print  false}}}}
 
   :profiles {:dev
-             {:source-paths ["src/cljs"]
+             {:source-paths ["src/cljs" "src/cljc"]
               :cljsbuild    {:builds {:report
                                       {:jar      true
                                        :compiler {:main          "skyfolks.core"

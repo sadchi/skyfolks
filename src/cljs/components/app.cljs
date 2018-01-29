@@ -1,6 +1,7 @@
 (ns components.app
   (:require
     [components.command-center :as cc]
+    [components.common-state :as cst]
     [components.common-styles :as cs]
     [components.console :as con]
     [components.core :as c]
@@ -68,7 +69,7 @@
 (defn wrap-log-command [log-a handler]
   (fn [context]
     (let [res (handler context)]
-      (swap! log-a conj [:neutral (:command res)])
+      (swap! log-a conj [:neutral (str "Executing: " (:command res))])
       res)))
 
 
@@ -91,11 +92,10 @@
 
 
 (defn app [_]
-  (let [extra-param (r/atom "Test work area")
-        log (r/atom [])]
+  (let [log (r/atom [])]
     (fn []
       [:div (c/cls 'app-container)
-       [:div (c/cls 'app-container__work-area) [wa/work-area extra-param]]
+       [:div (c/cls 'app-container__work-area) [wa/work-area cst/extra-param]]
        [:div (c/cls 'app-container__panels)
         [t/toolbar [{:content  [:div (c/cls 'cs/icon-pencil)]
                      :on-click (fn [] (c/log "Ha ha"))}
@@ -113,7 +113,7 @@
                      :on-click (fn [] (c/log "i-5"))}]]
         [:div (c/cls 'app-container__panels__rest)
          [:div (c/cls 'app-container__panels__rest__0-50) [con/console :log-a log :handler (full-handler log)]]
-         [:div (c/cls 'app-container__panels__rest__50-100) [jb/json-box extra-param]]]
+         [:div (c/cls 'app-container__panels__rest__50-100) [jb/json-box cst/extra-param]]]
         ]])))
 
 
