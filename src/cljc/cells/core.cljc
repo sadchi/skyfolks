@@ -8,3 +8,10 @@
                              :state    :solid}
                  :mid-front nil
                  :front     nil})
+
+
+(defn landscape? [cell]
+  (-> cell
+      (:inner)
+      (:type)
+      (= :lanscape)))

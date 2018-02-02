@@ -46,7 +46,6 @@
                                  :width        (px (v :width))
                                  :height       "100%"
                                  :background   "grey"
-
                                  :border       "1px solid blue"})
 
 (defn work-area [data]
