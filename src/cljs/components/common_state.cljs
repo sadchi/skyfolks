@@ -12,4 +12,4 @@
 
 (def world (r/atom empty-world))
 
-(def render (r/atom identity))
+(def render (r/atom (fn [x] nil)))

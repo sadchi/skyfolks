@@ -1,9 +1,10 @@
 (ns components.command-center
   (:require
     [cells.core :as c]
-    [clojure.string :as s]
     [cljs.pprint :as pp]
+    [clojure.string :as s]
     [components.common-state :as cst]
+    [components.renders :as r]
     ))
 
 
@@ -18,15 +19,26 @@
   (if-not (and w h)
     [:bad (str "Required two params")]
     (do
-      (reset! cst/world {:w    w
-                         :h    h
-                         :data (repeatedly (js/parseInt h) #(repeat (js/parseInt w) {}))})
+      (let [width (js/parseInt w)
+            height (js/parseInt h)]
+        (reset! cst/world {:w    width
+                           :h    height
+                           :data (repeatedly height #(repeat width {}))}))
       [:good (str "World initialized with empty " w "x" h " grid")])))
+
+
+(defn render [& [render-key]]
+  (if-not render-key
+    [:bad (str "Required parameter is missing: render keyword")]
+    (do
+      (reset! cst/render (get r/renders-list (keyword render-key) (fn [x] nil)))
+      [:good (str "Attempt to set [" render-key "] render")])))
 
 
 (def command-list {:echo       echo
                    :def-brash  def-brash
-                   :init-world init-world})
+                   :init-world init-world
+                   :render     render})
 
 
 (defn execute-command [command]

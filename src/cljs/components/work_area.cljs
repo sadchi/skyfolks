@@ -1,5 +1,6 @@
 (ns components.work-area
   (:require
+    [components.common-state :as cst]
     [components.common-styles :as cs]
     [components.core :as c]
     [components.params :as p]
@@ -37,30 +38,26 @@
 
 (def work-area__block ^:css {})
 
-(def work-area__row ^:css {:height        (px (v :height))
-                           :margin-bottom (px -1)
-                           })
+(def work-area__row ^:css [cs/flex-box
+                           {:height        (px (v :height))
+                            :margin-bottom (px -1)
+                            }])
 
 (def work-area__row__cell ^:css {:margin-right (px -1)
-                                 :display      "inline-block"
                                  :width        (px (v :width))
                                  :height       "100%"
                                  :background   "grey"
-                                 :border       "1px solid blue"})
+                                 ;:border       "1px solid blue"
+                                 })
 
 (defn work-area [data]
   (fn [data]
     [:div (c/cls 'work-area-s)
      [:div (c/cls 'work-area__block)
-      [:div (c/cls 'work-area__row)
-       [:div (c/cls 'work-area__row__cell)]
-       [:div (c/cls 'work-area__row__cell)]
-
-       ]
-      [:div (c/cls 'work-area__row)
-       [:div (c/cls 'work-area__row__cell)]
-       [:div (c/cls 'work-area__row__cell)]
-       [:div (c/cls 'work-area__row__cell)]
-       ]]]))
+      (doall (for [[idx row] (map-indexed vector (:data @cst/world))]
+               ^{:key idx} [:div (c/cls 'work-area__row)
+                            (doall (for [[idx2 cell] (map-indexed vector row)]
+                                     ^{:key idx2} [:div (c/cls 'work-area__row__cell
+                                                               (@cst/render cell))]))]))]]))
 
 (c/add-css (ns-interns 'components.work-area))
