@@ -2,6 +2,7 @@
   (:require
     [cells.core :as c]
     [cljs.pprint :as pp]
+    [cljs.reader :as cr]
     [clojure.string :as s]
     [components.common-state :as cst]
     [components.renders :as r]
@@ -14,6 +15,15 @@
 (defn def-brash [& params]
   (reset! cst/extra-param (with-out-str (pp/pprint c/empty-cell)))
   [:good "Default brash loaded"])
+
+(defn set-brash [& params]
+  (let [new-brash (cr/read-string @cst/extra-param)]
+    (if new-brash
+      (do
+        (reset! cst/current-brash new-brash)
+        [:good (str "Set new brash " new-brash)])
+      [:bad "Wrong data for the new brash"])))
+
 
 (defn init-world [& [w h]]
   (if-not (and w h)
@@ -31,14 +41,20 @@
   (if-not render-key
     [:bad (str "Required parameter is missing: render keyword")]
     (do
-      (reset! cst/render (get r/renders-list (keyword render-key) (fn [x] nil)))
-      [:good (str "Attempt to set [" render-key "] render")])))
+      (let [render (get r/renders-list (keyword render-key))]
+        (reset! cst/render (if render render (fn [x] nil))))
+      (if render
+        [:good (str "Attempt to set [" render-key "] render")]
+        [:bad (str "Render [" render-key "] not found")]))))
 
 
-(def command-list {:echo       echo
+(def command-list {
                    :def-brash  def-brash
+                   :echo       echo
                    :init-world init-world
-                   :render     render})
+                   :render     render
+                   :set-brash  set-brash
+                   })
 
 
 (defn execute-command [command]

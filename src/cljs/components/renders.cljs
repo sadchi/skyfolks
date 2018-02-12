@@ -28,6 +28,6 @@
     'free-cell))
 
 
-(def renders-list {:lanscape-vs-free landscape-vs-free})
+(def renders-list {:landscape-vs-free landscape-vs-free})
 
 (c/add-css (ns-interns 'components.renders))

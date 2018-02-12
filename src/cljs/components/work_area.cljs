@@ -4,6 +4,7 @@
     [components.common-styles :as cs]
     [components.core :as c]
     [components.params :as p]
+    [components.world :as w]
     [garden.core :refer [css]]
     [garden.units :refer [px]]
     [keybind.core :as key]
@@ -58,6 +59,7 @@
                ^{:key idx} [:div (c/cls 'work-area__row)
                             (doall (for [[idx2 cell] (map-indexed vector row)]
                                      ^{:key idx2} [:div (c/cls 'work-area__row__cell
-                                                               (@cst/render cell))]))]))]]))
+                                                               (@cst/render cell)
+                                                               :on-click #(swap! cst/world w/update-world idx idx2 @cst/current-brash))]))]))]]))
 
 (c/add-css (ns-interns 'components.work-area))

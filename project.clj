@@ -17,6 +17,7 @@
                  [prismatic/schema "1.1.7"]
                  [reagent "0.8.0-alpha2"]
                  [ring "1.6.3"]
+                 [ring/ring-json "0.4.0"]
                  ]
 
 

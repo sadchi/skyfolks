@@ -14,4 +14,4 @@
   (-> cell
       (:inner)
       (:type)
-      (= :lanscape)))
+      (= :landscape)))

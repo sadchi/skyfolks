@@ -20,6 +20,21 @@
 (defn v [& k] (get-in params k))
 
 
+(defn update-world [world row col cell]
+  (let [data (:data world)
+        [before after] (split-at row data)
+        target-row (first after)
+        after (rest after)]
+    (assoc world :data
+                 (concat
+                   before
+                   (list (concat
+                           (take col target-row)
+                           (list cell)
+                           (drop (inc col) target-row)
+                           ))
+                   after))))
+
 
 
 
