@@ -1,6 +1,7 @@
 (ns skyfolks.core
   (:require
     [aleph.http :as http]
+    [clojure.tools.logging :as log]
     [compojure.core :as c]
     [compojure.route :as cr]
     [hiccup.page :refer [html5 include-js]]
@@ -46,6 +47,7 @@
 
 (defn -main [& args]
   (let [cfg (read-cfg "./cfg/config.clj")]
+    (log/debug "Starting with cfg: " cfg)
     (http/start-server (wrap-reload (handlers cfg)) {:port 10000})
     (println "Started")))
 

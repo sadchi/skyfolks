@@ -96,18 +96,19 @@
         prev-pointer (fn [x] (max (dec x) 0))
 
         add-command-to-buffer (fn []
-                                (c/log "Add to buffer")
+                                ;(c/log "Add to buffer")
                                 (swap! commands conj @val)
                                 (reset! read-pointer 0)
                                 (reset! val "")
-                                (c/log "commands: " @commands))
+                                ;(c/log "commands: " @commands)
+                                )
         next-command-from-buffer (fn []
-                                   (c/log "Getting next command")
-                                   (c/log "commands: " @commands)
+                                   ;(c/log "Getting next command")
+                                   ;(c/log "commands: " @commands)
                                    (reset! val (nth @commands (swap! read-pointer next-pointer))))
         prev-command-from-buffer (fn []
-                                   (c/log "Getting prev command")
-                                   (c/log "commands: " @commands)
+                                   ;(c/log "Getting prev command")
+                                   ;(c/log "commands: " @commands)
                                    (reset! val (nth @commands (swap! read-pointer prev-pointer))))
         ]
     (r/create-class

@@ -77,12 +77,13 @@
 (defn wrap-execute-command [handler]
   (fn [context]
     (let [res (handler context)]
-      (assoc res :result (cc/execute-command context)))))
+      (assoc res :result (cc/execute-command res)))))
 
 (defn wrap-log-result [log-a handler]
   (fn [context]
     (let [res (handler context)]
-      (swap! log-a conj (:result res)))))
+      (swap! log-a concat (:result res))
+      res)))
 
 (defn full-handler [log-a]
   (->> (wrap-add-command)
