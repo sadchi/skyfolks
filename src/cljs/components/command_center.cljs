@@ -1,13 +1,18 @@
 (ns components.command-center
   (:require
-    [ajax.core :refer [GET POST]]
+    [ajax.core :refer [GET POST PUT]]
     [cells.core :as ce]
     [cljs.pprint :as pp]
     [cljs.reader :as cr]
     [clojure.string :as s]
     [components.common-state :as cst]
     [components.renders :as r]
-    [components.core :as c]))
+    [components.core :as c]
+    ))
+
+
+(def save-world-url "/world")
+(def load-world-url "/world")
 
 
 (defn echo [& params]
@@ -51,7 +56,17 @@
 
 (defn save-world [& [filename]]
   (if-not filename
-    [[:bad (str "Required parameter is missing: filename")]))
+    [[:bad (str "Required parameter is missing: filename")]]
+    (let []
+      (PUT save-world-url {:params        {:filename filename
+                                           :world    @cst/world}
+                           :format        :json
+                           :handler       (fn [x]
+                                            (swap! cst/log conj [:good "World saved successfully"]))
+                           :error-handler (fn [x]
+                                            (swap! cst/log conj [:bad (str "Error during saving the world: " x)]))
+                           })
+      [[:neutral "Command save-world issued"]])))
 
 (def command-list {
                    :def-brash  def-brash

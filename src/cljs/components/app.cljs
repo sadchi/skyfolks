@@ -82,7 +82,7 @@
 (defn wrap-log-result [log-a handler]
   (fn [context]
     (let [res (handler context)]
-      (swap! log-a concat (:result res))
+      (swap! log-a into (:result res))
       res)))
 
 (defn full-handler [log-a]
@@ -93,29 +93,28 @@
 
 
 (defn app [_]
-  (let [log (r/atom [])]
-    (fn []
-      [:div (c/cls 'app-container)
-       [:div (c/cls 'app-container__work-area) [wa/work-area cst/extra-param]]
-       [:div (c/cls 'app-container__panels)
-        [t/toolbar [{:content  [:div (c/cls 'cs/icon-pencil)]
-                     :on-click (fn [] (c/log "Ha ha"))}
-                    {:content  [:div (c/cls 'cs/icon-up)]
-                     :on-click (fn [] (c/log "Mmmmm"))}
-                    {:content  [:div (c/cls 'cs/icon-down)]
-                     :on-click (fn [] (c/log "i-1"))}
-                    {:content  [:div (c/cls 'cs/icon-play)]
-                     :on-click (fn [] (c/log "i-2"))}
-                    {:content  [:div (c/cls 'cs/icon-fast-forward)]
-                     :on-click (fn [] (c/log "i-3"))}
-                    {:content  [:div (c/cls 'cs/icon-to-end)]
-                     :on-click (fn [] (c/log "i-4"))}
-                    {:content  [:div (c/cls 'cs/icon-pause)]
-                     :on-click (fn [] (c/log "i-5"))}]]
-        [:div (c/cls 'app-container__panels__rest)
-         [:div (c/cls 'app-container__panels__rest__0-50) [con/console :log-a log :handler (full-handler log)]]
-         [:div (c/cls 'app-container__panels__rest__50-100) [jb/json-box cst/extra-param]]]
-        ]])))
+  (fn []
+    [:div (c/cls 'app-container)
+     [:div (c/cls 'app-container__work-area) [wa/work-area cst/extra-param]]
+     [:div (c/cls 'app-container__panels)
+      [t/toolbar [{:content  [:div (c/cls 'cs/icon-pencil)]
+                   :on-click (fn [] (c/log "Ha ha"))}
+                  {:content  [:div (c/cls 'cs/icon-up)]
+                   :on-click (fn [] (c/log "Mmmmm"))}
+                  {:content  [:div (c/cls 'cs/icon-down)]
+                   :on-click (fn [] (c/log "i-1"))}
+                  {:content  [:div (c/cls 'cs/icon-play)]
+                   :on-click (fn [] (c/log "i-2"))}
+                  {:content  [:div (c/cls 'cs/icon-fast-forward)]
+                   :on-click (fn [] (c/log "i-3"))}
+                  {:content  [:div (c/cls 'cs/icon-to-end)]
+                   :on-click (fn [] (c/log "i-4"))}
+                  {:content  [:div (c/cls 'cs/icon-pause)]
+                   :on-click (fn [] (c/log "i-5"))}]]
+      [:div (c/cls 'app-container__panels__rest)
+       [:div (c/cls 'app-container__panels__rest__0-50) [con/console :log-a cst/log :handler (full-handler cst/log)]]
+       [:div (c/cls 'app-container__panels__rest__50-100) [jb/json-box cst/extra-param]]]
+      ]]))
 
 
 

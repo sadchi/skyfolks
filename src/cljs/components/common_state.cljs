@@ -13,3 +13,5 @@
 (def world (r/atom empty-world))
 
 (def render (r/atom (fn [x] nil)))
+
+(def log (r/atom []))

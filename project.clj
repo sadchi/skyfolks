@@ -6,6 +6,7 @@
 
   :dependencies [
                  [aleph "0.4.4"]
+                 [cheshire "5.8.0"]
                  [cljs-ajax "0.7.3"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [compojure "1.6.0"]

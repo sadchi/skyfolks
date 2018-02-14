@@ -1,6 +1,7 @@
 (ns skyfolks.core
   (:require
     [aleph.http :as http]
+    [cheshire.core :refer [generate-string]]
     [clojure.tools.logging :as log]
     [compojure.core :as c]
     [compojure.route :as cr]
@@ -12,11 +13,22 @@
     [ring.middleware.reload :refer [wrap-reload]]
     [skyfolks.cfg :refer [read-cfg]]
     [skyfolks.world :as w]
+    [skyfolks.common.string :as s]
     ))
 
 
+(defn wrap-exception-handling [handler]
+  (fn [request]
+    (try
+      (handler request)
+      (catch Throwable e
+        (log/trace (generate-string (assoc (:json-params request) :exception (s/generate-exception e))))
+        (s/log-exception e)
+        (throw e)))))
+
 (defn common-handler [handler]
   (-> handler
+      wrap-exception-handling
       wrap-keyword-params
       wrap-params
       wrap-json-params
