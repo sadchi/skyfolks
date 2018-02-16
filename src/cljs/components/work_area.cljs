@@ -39,16 +39,12 @@
 
 (def work-area__block ^:css {})
 
-(def work-area__row ^:css [cs/flex-box
-                           {:height        (px (v :height))
-                            :margin-bottom (px -1)
-                            }])
+(def work-area__row ^:css [cs/flex-box {:height (px (v :height))}])
 
-(def work-area__row__cell ^:css {:margin-right (px -1)
-                                 :width        (px (v :width))
-                                 :height       "100%"
-                                 :background   "grey"
-                                 ;:border       "1px solid blue"
+(def work-area__row__cell ^:css {
+                                 :background "grey"
+                                 :height     "100%"
+                                 :width      (px (v :width))
                                  })
 
 (defn work-area [data]

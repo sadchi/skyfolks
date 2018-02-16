@@ -68,10 +68,19 @@
                            })
       [[:neutral "Command save-world issued"]])))
 
+
+(defn load-world [& [filename]]
+  (GET load-world-url {:params        {:filename filename}
+                       :handler       (fn [x]
+                                        (swap! cst/log conj [:good "World loaded successfully"]))
+                       :error-handler (fn [x]
+                                        (swap! cst/log conj [:bad (str "Error during loading the world: " x)]))}))
+
 (def command-list {
                    :def-brash  def-brash
                    :echo       echo
                    :init-world init-world
+                   :load-world load-world
                    :render     render
                    :save-world save-world
                    :set-brash  set-brash
