@@ -70,11 +70,17 @@
 
 
 (defn load-world [& [filename]]
-  (GET load-world-url {:params        {:filename filename}
-                       :handler       (fn [x]
-                                        (swap! cst/log conj [:good "World loaded successfully"]))
-                       :error-handler (fn [x]
-                                        (swap! cst/log conj [:bad (str "Error during loading the world: " x)]))}))
+  (GET load-world-url {:params          {:filename filename}
+                       :response-format :json
+                       :keywords?       true
+                       :handler         (fn [x]
+                                          ;(c/log "load-world x " x)
+                                          (swap! cst/log conj [:good "World loaded successfully"])
+                                          (reset! cst/world x)
+                                          )
+                       :error-handler   (fn [x]
+                                          (swap! cst/log conj [:bad (str "Error during loading the world: " x)]))})
+  [[:neutral "Command load-world issued"]])
 
 (def command-list {
                    :def-brash  def-brash

@@ -98,7 +98,7 @@
         add-command-to-buffer (fn []
                                 ;(c/log "Add to buffer")
                                 (swap! commands conj @val)
-                                (reset! read-pointer 0)
+                                (swap! read-pointer inc)
                                 (reset! val "")
                                 ;(c/log "commands: " @commands)
                                 )

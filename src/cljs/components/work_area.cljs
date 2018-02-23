@@ -8,8 +8,8 @@
     [garden.core :refer [css]]
     [garden.units :refer [px]]
     [keybind.core :as key]
-    [reagent.core :as r]
-    ))
+    [reagent.core :as r]))
+
 
 
 (def default-params
@@ -17,8 +17,8 @@
    :accent  "#607D8B"
    :padding 16
    :height  16
-   :width   16
-   })
+   :width   16})
+
 
 (def params (merge default-params (get p/params (name (namespace ::x)))))
 
@@ -44,11 +44,12 @@
 (def work-area__row__cell ^:css {
                                  :background "grey"
                                  :height     "100%"
-                                 :width      (px (v :width))
-                                 })
+                                 :width      (px (v :width))})
+
 
 (defn work-area [data]
   (fn [data]
+    (c/log "work-area world " @cst/world)
     [:div (c/cls 'work-area-s)
      [:div (c/cls 'work-area__block)
       (doall (for [[idx row] (map-indexed vector (:data @cst/world))]

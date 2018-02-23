@@ -3,9 +3,9 @@
 
 (def empty-cell {:back      nil
                  :mid-back  nil
-                 :inner     {:type     :landscape
-                             :material :granite
-                             :state    :solid}
+                 :inner     {:type     "landscape"
+                             :material "granite"
+                             :state    "solid"}
                  :mid-front nil
                  :front     nil})
 
@@ -14,4 +14,4 @@
   (-> cell
       (:inner)
       (:type)
-      (= :landscape)))
+      (= "landscape")))

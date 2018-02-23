@@ -18,7 +18,10 @@
 (defn load-world [cfg req]
   (log/debug "load-world issued " req)
   (let [filename (get-in req [:params :filename])]
-    (if-not filename
+    (log/debug "load-world filename " filename)
+    (if (empty? filename)
       (response @our-world)
-      (response (read-string (slurp (str (get-in cfg [:world :location]) "/" filename)))))))
+      (let [new-world (read-string (slurp (str (get-in cfg [:world :location]) "/" filename)))]
+        (send our-world (fn [_] new-world))
+        (response new-world)))))
 
