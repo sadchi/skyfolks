@@ -108,7 +108,8 @@
                   {:content  [:div (c/cls 'cs/icon-fast-forward)]
                    :on-click (fn [] (c/log "i-3"))}
                   {:content  [:div (c/cls 'cs/icon-to-end)]
-                   :on-click (fn [] (c/log "i-4"))}
+                   :key-bind "f6"
+                   :on-click #((full-handler cst/log) "new-world")}
                   {:content  [:div (c/cls 'cs/icon-pause)]
                    :on-click (fn [] (c/log "i-5"))}]]
       [:div (c/cls 'app-container__panels__rest)

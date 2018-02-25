@@ -6,6 +6,7 @@
     [garden.color :as gc]
     [garden.core :refer [css]]
     [garden.units :refer [px]]
+    [keybind.core :as key]
     ))
 
 
@@ -73,7 +74,10 @@
   (fn [items]
     [:div (c/cls 'toolbar-s)
      [:div (c/cls 'toolbar-s__shadow-wrapper) [:div (c/cls 'toolbar-s__shadow)]]
-     (for [[idx {:keys [content on-click]}] (map-indexed vector items)]
+     (for [[idx {:keys [content on-click key-bind]}] (map-indexed vector items)
+           :let [_ (when (some? key-bind)
+                     (key/bind! key-bind (str "toolbar-" key-bind) on-click))]]
+
        ^{:key idx} [:div (c/cls 'toolbar-s__item
                                 'toolbar-s__item--clickable
                                 :on-click on-click) content])

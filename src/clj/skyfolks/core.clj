@@ -52,6 +52,7 @@
                                  (include-js "app.js")])})
       (c/GET "/world" [] (common-handler (partial w/load-world cfg)))
       (c/PUT "/world" [] (common-handler (partial w/save-world cfg)))
+      (c/PATCH "/world" [] (common-handler w/calculate-new-world))
       (cr/resources "/")
       (cr/not-found "No such page."))))
 
@@ -59,6 +60,7 @@
 
 (defn -main [& args]
   (let [cfg (read-cfg "./cfg/config.clj")]
+    (log/info (apply str (take 200 (repeat "*"))))
     (log/debug "Starting with cfg: " cfg)
     (http/start-server (wrap-reload (handlers cfg)) {:port 10000})
     (println "Started")))

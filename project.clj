@@ -7,6 +7,7 @@
   :dependencies [
                  [aleph "0.4.4"]
                  [cheshire "5.8.0"]
+                 [clj-time "0.14.2"]
                  [cljs-ajax "0.7.3"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [compojure "1.6.0"]
@@ -18,6 +19,7 @@
                  [org.apache.logging.log4j/log4j-slf4j-impl "2.10.0"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.946"]
+                 [org.clojure/core.match "0.3.0-alpha5"]
                  [org.clojure/tools.logging "0.4.0"]
                  [prismatic/schema "1.1.7"]
                  [reagent "0.8.0-alpha2"]

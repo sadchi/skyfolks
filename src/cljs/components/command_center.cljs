@@ -1,16 +1,19 @@
 (ns components.command-center
   (:require
-    [ajax.core :refer [GET POST PUT]]
+    [ajax.core :refer [GET POST PUT PATCH]]
     [cells.core :as ce]
     [cljs.pprint :as pp]
     [cljs.reader :as cr]
+    [clojure.core.match :refer [match]]
     [clojure.string :as s]
     [components.common-state :as cst]
-    [components.renders :as r]
     [components.core :as c]
+    [components.renders :as r]
+    [components.world :as w]
     ))
 
 
+(def world-url "/world")
 (def save-world-url "/world")
 (def load-world-url "/world")
 
@@ -82,6 +85,35 @@
                                           (swap! cst/log conj [:bad (str "Error during loading the world: " x)]))})
   [[:neutral "Command load-world issued"]])
 
+
+(defn get-world-new-state []
+  (PATCH world-url {:response-format :json
+                    :keywords?       true
+                    :handler         (fn [x]
+                                       ;(c/log "load-world x " x)
+                                       (swap! cst/log conj [:good "New world loaded successfully"])
+                                       (swap! cst/log conj [:warning (str "World times: " (:elapsed x))])
+                                       (reset! cst/world x)
+                                       )
+                    :error-handler   (fn [x]
+                                       (swap! cst/log conj [:bad (str "Error during loading the new world: " x)]))})
+  [[:neutral "Command get-world-new-state issued"]])
+
+
+(defn fill [& [r1 c1 r2 c2 :as params]]
+  (let [[r'1 c'1 r'2 c'2] (mapv #(some-> %
+                                         (js/parseInt %)) params)
+
+        {:keys [w h]} @cst/world
+        [start-row start-col end-row end-col] (match [r'1 c'1 r'2 c'2]
+                                                     [nil nil nil nil] [0 0 h w]
+                                                     [_ _ nil nil] [r'1 c'1 h w]
+                                                     [_ nil nil nil] [r'1 0 h w]
+                                                     :else [r'1 c'1 r'2 c'2])
+        _ (c/log (str "Command fill params: " start-row " " start-col " " end-row " " end-col ))]
+    (swap! cst/world w/update-world start-row start-col end-row end-col @cst/current-brash)
+    [[:neutral (str "Command fill " start-row " " start-col " " end-row " " end-col " issued")]]))
+
 (def command-list {
                    :def-brash  def-brash
                    :echo       echo
@@ -90,6 +122,8 @@
                    :render     render
                    :save-world save-world
                    :set-brash  set-brash
+                   :new-world  get-world-new-state
+                   :fill       fill
                    })
 
 

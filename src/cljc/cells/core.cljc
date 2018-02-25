@@ -7,6 +7,7 @@
                              :material "granite"
                              :state    "solid"
                              :attr     {:thermal-conductivity 0
+                                        :thermal-capacity     0
                                         :temperature          0}}
                  :mid-front nil
                  :front     nil})
